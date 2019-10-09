@@ -1,5 +1,5 @@
 <h1>Manuale Basi R</h1>
-<hr>
+
 Preparazione manuale basi di R con esercizi dedicati
 
 * Operazioni base
