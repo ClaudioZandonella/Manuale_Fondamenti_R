@@ -1,0 +1,694 @@
+\documentclass{article}
+\usepackage[italian,english]{babel}
+
+\usepackage{natbib}
+\bibliographystyle{apa}
+
+%\usepackage[doublespacing]{setspace}
+\renewcommand{\baselinestretch}{1.5} 
+\usepackage{a4wide}
+\usepackage[labelfont=bf]{caption}
+\usepackage{makecell}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{gensymb}  %degree symbol
+\usepackage[most]{tcolorbox} % colored box
+
+\renewenvironment{knitrout}{\renewcommand{\baselinestretch}{.85}}{}
+
+\usepackage{hyperref}
+
+\title{Manuale Base R}
+\author{Antonio Calcagnì\\Claudio Zandonella Callegher}
+
+
+<<settings, echo=F>>=
+opts_chunk$set(echo=T,message=FALSE,warning=FALSE,dev='tikz',fig.align='center',fig.height=3,fig.width=5,fig.lp="fig:",prompt=TRUE,comment=NA,fig.pos="!h")
+
+thm = knit_theme$get("bclear") # ***
+knit_theme$set(thm)
+@
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\newpage
+
+%%%------------------------------%%%
+%%%----    Esercizi in R    -----%%%
+%%%------------------------------%%%
+
+
+%%%-------  Scrittura espressioni  ------
+
+\section{Scrittura di espressioni}
+
+R è un'ottima calcolatrice.
+
+% specificare l'ordine degli operatori
+% specificare l'uso delle parentesi
+% specificare l'uso di funzione, argomenti funzione
+% specificare l'uso dell'help function
+
+\begin{table}[h!]
+\renewcommand{\baselinestretch}{1} 
+\begin{center}
+\caption{Principali funzioni matematiche in R}
+\begin{tabular}[t]{ |l|l|l| } 
+ \hline
+ \texttt{x + y} & Addizione                     & \texttt{\makecell[l]{> 5 + 3\\ {[1]} 8}} \\
+ \hline
+ \texttt{x - y} & Sottrazione                   & \texttt{\makecell[l]{> 7 - 2\\ {[1]} 5}} \\ 
+ \hline
+ \texttt{x * y} & Moltiplicazione               & \texttt{\makecell[l]{> 4 * 3\\ {[1]} 12}} \\ 
+ \hline
+ \texttt{x / y} & Divisione                     & \texttt{\makecell[l]{> 8 / 3\\ {[1]} 2.666667}} \\ 
+ \hline
+ \texttt{x \%\% y} & Resto della divisione      & \texttt{\makecell[l]{> 7 \%\% 5\\ {[1]} 2}} \\ 
+ \hline
+ \texttt{x \%/\% y} & Divisione intera      & \texttt{\makecell[l]{> 7 \%/\% 5\\ {[1]} 1}} \\ 
+ \hline
+ \texttt{abs (x)} & Valore assoluto      & \texttt{\makecell[l]{> abs(3-5\^{}2)\\ {[1]} 22}} \\ 
+ \hline
+ \texttt{sign (x)} & Segno di un'espressione      & \texttt{\makecell[l]{> sign(-8)\\ {[1]} -1}} \\ 
+ \hline
+ \texttt{sqrt (x)} & Radice quadrata      & \texttt{\makecell[l]{> sqrt(25)\\ {[1]} 5}} \\ 
+ \hline
+ \texttt{log (x)} & Logaritmo naturale      & \texttt{\makecell[l]{> log(10)\\ {[1]} 2.302585}} \\ 
+ \hline
+ \texttt{exp (x)} & Esponenziale      & \texttt{\makecell[l]{> exp(1)\\ {[1]} 2.718282}} \\ 
+ \hline
+ \texttt{\makecell[l]{sin (x)\\ cos (x)\\ tan (x)\\ asin (x)\\ acos (x)\\ atan (x)}} & Funzioni trigonometriche      & \texttt{\makecell[l]{> sin(pi/2)\\ {[1]} 1\\ \\ > cos(pi/2)\\ {[1]} 6.123234e-17}} \\ 
+ \hline
+ \texttt{factorial (x)} & Fattoriale      & \texttt{\makecell[l]{> factorial(6)\\ {[1]} 720}} \\ 
+ \hline
+ \texttt{choose (n, k)} & Coefficiente combinatorio      & \texttt{\makecell[l]{> choose(5,3)\\ {[1]} 10}} \\ 
+ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\newpage
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]
+Calcola il risultato delle seguenti espressioni utilizzando R.
+
+\begin{eqnarray*}
+\left.\begin{aligned}
+&1)\ \frac{(45+21)^3+\frac{3}{4}}{\sqrt{32-\frac{12}{17}}}\\
+\\
+&2)\ \frac{\sqrt{7-\pi}}{3\ (45-34)}\\
+\\
+&3)\ \sqrt[3]{12-e^2}+\ln(10\pi)\\
+\\
+&4)\ \frac{\sin(\frac{3}{4}\pi)^2+\cos(\frac{3}{2}\pi)}{\log_7{e^{\frac{3}{2}}}}\\
+\\
+&5)\ \frac{\sum_{n=1}^{10} n}{10}
+\end{aligned}\right.
+\end{eqnarray*}
+\end{tcolorbox}
+%funzione sum(1:10)
+
+\vspace{2em}
+
+\textbf{Note:}
+\begin{itemize}
+    \item{In R la radice quadrata si ottine con la funzione \texttt{sqrt()} mentre per radici di indici diversi si utilizza la notazione esponenziale ($\sqrt[3]{x}$ è dato da \texttt{x\^\ (1/3)}).}
+    \item{Il valore di $\pi$ si ottiene con \texttt{pi}.}
+    \item{Il valore di $e$ si ottiene con \texttt{exp(1)}.}
+    \item{In R per i logaritmi si usa la funzione \texttt{log(x, base=a)}, di base viene  considerato il logaritmo naturale.}
+\end{itemize}
+
+\newpage
+
+
+%%%-------  Creare vettori ------
+
+\section{Vettori}
+
+%---------
+\subsection{Creazione di vettori}
+
+In R per definire un vettore si utilizza il comando \texttt{nome\_vettore <- c(oggetti)}. Ricorda che gli elementi devono essere separati da una virgola.
+
+% specificare diversi tipi di assign
+% specificare l'uso di c()
+% specificare l'uso di 1:10
+% specificare l'uso di seq() le due differenti versioni
+% specificare l'uso di rep() le due differenti versioni
+
+% specificare la definizione di caretteri rispetto numeri
+
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Crea il vettore \texttt{x} contenente i numeri 4, 6, 12, 34, 8.}
+    \item{Crea il vettore \texttt{y} contenente tutti i numeri pari compresi tra 1 e 25 (\texttt{?seq()}).}
+    \item{Crea il vettore \texttt{z} contenente tutti i primi 10 multipli di 7 partendo da 13 (\texttt{?seq()}).}
+    \item{Crea il vettore \texttt{s} in cui le lettere \texttt{"A"},\texttt{"B"} e \texttt{"C"} vengono ripetute nel medesimo ordine 4 volte (\texttt{?rep()}).}
+    \item{Crea il vettore \texttt{t} in cui le letter \texttt{"A"},\texttt{"B"} e \texttt{"C"} vengono ripetute ognuna 4 volte (\texttt{?rep()}).}
+\end{enumerate}
+\end{tcolorbox}
+%------
+\subsection{Selezione elementi di un vettore}
+
+In R per selezioneare gli elementi di un vettore si deve indicare all'interno delle parentesi quadre la \textbf{posizione degli elementi} da selezionare, non il valore dell'elemento stesso
+
+\texttt{nome\_vettore{[indice\_posizione]}}\\
+% esempio selezione con valori e non indici --> errore
+% specificare selezione c() oppure senza c() che da errore dimensioni
+In alternativa si puù definire la condizione logica che gli elementi che si vogliono selezionare devono rispettare.
+
+
+
+\begin{table}[h!]
+\renewcommand{\baselinestretch}{1} 
+\begin{center}
+\caption{Operatori logici in R}
+\begin{tabular}[t]{ |l|l|l| } 
+ \hline
+ \texttt{x == y} & Uguale       & \texttt{\makecell[l]{> 5==3\\ {[1]} FALSE}} \\
+ \hline
+ \texttt{x != y} & Diverso       & \texttt{\makecell[l]{> 5!=3\\ {[1]} TRUE}} \\
+ \hline
+ \texttt{x >= y} & Maggiore o uguale       & \texttt{\makecell[l]{> 5>=3\\ {[1]} TRUE}} \\
+ \hline
+ \texttt{x > y} & Maggiore       & \texttt{\makecell[l]{> 13>7\\ {[1]} TRUE}} \\
+ \hline
+ \texttt{x <= y} & Minore o uguale       & \texttt{\makecell[l]{> 5<=3\\ {[1]} FALSE}} \\
+ \hline
+ \texttt{x < y} & Minore       & \texttt{\makecell[l]{> 13<7\\ {[1]} FALSE}} \\
+ \hline
+\end{tabular}
+\end{center}
+\end{table}
+% Attenzione differenza = e ==
+
+Per concatenare più operazioni logiche si possono usare la congiunzione logica “$e$” (\textbf{\&}) o la disgiunzione inclusiva “$o$” $(\bm{|})$.
+% Fare esempi frasi
+% Non usare c() nelle condizioni logiche
+Per \textbf{eliminare degli elementi} da un vettore si utilizza all'interno delle parentesi quadre l'operatore “-” insieme agli indici di posizione degli elementi da eliminare (esempio: \texttt{x{[c(-2,-4)]}} oppure \texttt{x{[-c(2,4)]}}).
+% Maggiore descrizione eliminare
+% funzione ?which()
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Del vettore \texttt{x} seleziona il 2\degree,3\degree e 5\degree elemento.}
+    \item{Del vettore \texttt{y} seleziona tutti i valori minori di 13 o maggiori di 19.}
+    \item{Del vettore \texttt{z} seleziona tutti i valori compresi tra 24 e 50.}
+    \item{Elimina dal vettore \texttt{z} i valori 28 e 42.}
+    \item{Del vettore \texttt{s} seleziona tutti gli elementi uguali ad  “A”.}
+    \item{Del vettore \texttt{t} seleziona tutti gli elementi diversi da  “B”.}
+\end{enumerate}
+\end{tcolorbox}
+
+%------
+\subsection{Funzioni ed operazioni tra vettori}
+
+Per compiere operazioni tra vettori è necessario che essi abbiano identica lunghezza.
+
+\renewcommand{\baselinestretch}{1} 
+\begin{table}[h!]
+\begin{center}
+\caption{Operazioni con vettori}
+\begin{tabular}[t]{ | p{.5\textwidth} | p{.5\textwidth} | } 
+ \hline
+ \texttt{nuovo\_vettore <- c(vettore1,vettore2)}       & Per unire più vettori in un unico vettore \\
+ \hline
+ \texttt{length(nome\_vettore)}       & Per valutare il numero di elementi contenuti in un vettore \\
+ \hline
+ \hline
+ \texttt{vettore1 + vettore2}       & Somma di due vettori \\
+ \texttt{vettore1 - vettore2}       & Differenza tra due vettori \\
+ \hline
+ \texttt{vettore1 * vettore2}       & Prodotto tra due vettori \\
+ \texttt{vettore1 / vettore2}       & Rapporto tra due vettori \\
+ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\textbf{Nota:} In R il prodotto e rapporto tra vettori sono eseguiti  elemento per elemento (al contrario di molti altri software).
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Crea il vettore \texttt{j} unendo i vettori \texttt{x} ed \texttt{z}.}
+    \item{Elimina gli ultimi tre elementi del vettore \texttt{j} e controlla che i vettori \texttt{j} e \texttt{y} abbiano la stessa lunghezza.}
+    \item{Calcola la somma tra i vettori \texttt{j} e \texttt{y}.}
+    \item{Moltiplica il vettore z per una costante \texttt{k=3}.}
+    \item{Calcola il prodotto tra i primi 10 elementi del vettore \texttt{y} ed il vettore \texttt{z}.}
+\end{enumerate}
+\end{tcolorbox}
+
+\newpage
+
+
+%%%-------  Creare Matrici ------
+
+\section{Matrici}
+
+%---------
+\subsection{Creazione di matrici}
+
+In R per definire una matrice di $n$ righe e $s$ colonne si utilizza il comando
+
+\texttt{nome\_matrice <- matrix(data, nrow=n, ncol=s, byrow=FALSE)} 
+
+\textbf{Nota}: Di default R riempie la matrice per colonne, impostando \texttt{byrow = TRUE} si riempie per righe.
+
+         
+         
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Crea la matrice \texttt{A} così definita: $$
+         \begin{matrix}
+              2 & 34 & 12 & 7\\
+              46 & 93 & 27 & 99\\
+              23  & 38 & 7 & 04
+         \end{matrix}
+         $$}
+         
+    \item{Crea la matrice \texttt{B} contenente tutti i primi 12 numeri dispari disposti su 4 righe e 3 colonne.}
+    \item{Crea la matrice \texttt{C} contenente i primi 12 multipli di 9 disposti su 3 righe e 4 colonne.}
+    \item{Crea la matrice \texttt{D}  formata da 3 colonne in cui le lettere \texttt{"A"},\texttt{"B"} e \texttt{"C"} vengano ripetute 4 volte ciascuna rispettivamente nella prima, seconda e terza colonna.}
+    \item{Crea la matrice \texttt{E}  formata da 3 righe in cui le lettere \texttt{"A"},\texttt{"B"} e \texttt{"C"} vengano ripetute 4 volte ciascuna rispettivamente nella prima, seconda e terza riga.}
+\end{enumerate}
+\end{tcolorbox}
+
+%------
+\subsection{Selezione di elementi di una matrice}
+
+In R per selezioneare gli elementi di matrice si deve indicare all'interno delle parentesi quadre l'indice di riga e l'indice di colonna (\textbf{separati da virgola}) degli elementi da selezionare oppure la condizione logica che devono rispettare.
+
+\texttt{nome\_matrice{[indice\_riga , indice\_colonna]}}
+
+\textbf{Nota:} per selezionare tutti gli elementi di una data riga o di una data colonna basta lasciare vuoto rispettivamente l'indice di riga o l'indice di colonna.
+
+\vspace{1em}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Utilizzando gli indici di riga e di colonna selziona il numero 27 della matrice \texttt{A}}
+    \item{Selziona gli elementi compresi tra la seconda e quarta riga, seconda e terza colonna della matrice \texttt{B}.}
+    \item{Seleziona solo gli elementi pari della matrice \texttt{A} (Nota: utilizza l'operazione resto \texttt{\%\%}).}
+    \item{Elimina dalla matrice \texttt{C} la terza riga e la terza colonna.}
+    \item{Seleziona tutti gli elementi della seconda e terza riga della matrice \texttt{B}.}
+    \item{Seleziona tutti gli elementi diversi da  “B” appartenenti alla matrice \texttt{D}.}
+\end{enumerate}
+\end{tcolorbox}
+
+%------
+\subsection{Funzioni ed operazioni tra matrici}
+
+
+\renewcommand{\baselinestretch}{1} 
+\begin{table}[h!]
+\begin{center}
+\caption{Operazioni con matrici}
+\begin{tabular}[t]{ | p{.5\textwidth} | p{.5\textwidth} | } 
+ \hline
+ \texttt{nuova\_matrice <- cbind(matrice1,matrice2)}       & Per unire due matrici creando nuove colonne (le matrici devono avere lo stesso numero di righe)  \\
+ \hline
+ \texttt{nuova\_matrice <- rbind(matrice1,matrice2)}       & Per unire due matrici creando nuove righe (le matrici devono avere lo stesso numero di colonne)  \\
+ \hline
+ \texttt{nrow(nome\_matrice)}       & Per valutare il numero di righe della matrice \\
+ \hline
+ \texttt{ncol(nome\_matrice)}       & Per valutare il numero di colonne della matrice \\
+ \hline
+ \texttt{dim(nome\_matrice)}       & Per valutare la dimensione della matrice (righe e colonne) \\
+ \hline
+ \texttt{t(nome\_matrice)}       & Per ottenere la trasposta della matrice \\
+ \hline
+ \texttt{diag(nome\_matrice)}       & Ottenere un vettore con gli elementi della diagonale della matrice \\
+ \hline
+ \texttt{det(nome\_matrice)}       & Ottenere il determinante della matrice (la matrice deve essere quadrata)\\
+ \hline
+ \texttt{solve(nome\_matrice)}       & Ottenere l'inversa della matrice  (la matrice deve essere quadrata)\\
+ \hline
+ \hline
+ \texttt{colnames(nome\_matrice)}       & Nomi delle colonne della matrice \\
+ \texttt{rownames(nome\_matrice)}       & Nomi delle righe della matrice \\
+ \hline
+ \hline
+ \texttt{matrice1 + matrice2}       & Somma elemento per elemento di due matrici \\
+ \texttt{matrice1 - matrice2}       & Differenza elemento per elemento tra due matrici \\
+ \hline
+ \texttt{matrice1 * matrice2}       & Prodotto elemento per elemento tra due matrici \\
+ \texttt{matrice1 / matrice2}       & Rapporto elemento per elemento tra due matrici \\
+ \hline
+ \texttt{matrice1 \%*\% matrice2}       & Prodotto matriciale \\
+ \hline
+ 
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\textbf{Note:}
+\begin{itemize}
+    \item{Per il significato di determinante di una matrice considera: \url{https://it.wikipedia.org/wiki/Determinante}.}
+    \item{Per il significato di matrice inversa considera: \url{https://it.wikipedia.org/wiki/Matrice_invertibile}.}
+    \item{Per  compiere operazioni elemento per elemento tra due matrici, esse devono avere la stessa dimensione.}
+    \item{Per compiere il prodotto matriciale il numero di colonne della prima matrice deve essere uguale al numero di righe della seconda matrice (vedi \url{https://it.wikipedia.org/wiki/Moltiplicazione_di_matrici}). }
+    \item{E' possibile assegnare nomi alle colonne e righe di una matrice rispettivamente atttraverso i comandi:
+    
+    \texttt{colnames(nome\_matrice)<-c("nome\_1",\ldots,"nome\_s")}
+    
+    \texttt{rownames(nome\_matrice)<-c("nome\_1",\ldots,"nome\_n")}}
+\end{itemize}
+
+\vspace{1em}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Crea la matrice \texttt{G} unendo alla matrice \texttt{A} le prime due colonne della matrice \texttt{C}.}
+    \item{Crea la matrice \texttt{H} unendo alla matrice \texttt{C} le prime due righe della matrice trasposta di \texttt{B}.}
+    \item{Ridefinisci la matrice \texttt{A} eliminando la seconda colonna. Ridefinisci la matrice \texttt{B} eliminando la prima riga. Verifica che le  matrici così ottenute abbiano la stessa dimensione.}
+    \item{Commenta i differenti risultati che otteniamo nelle operazioni \texttt{A*B}, \texttt{B*A}, \texttt{A\%*\%B} e \texttt{B\%*\%A}.}
+    \item{Assegna i seguenti nomi alle colonne e alle righe della matrice \texttt{C}: \texttt{"col\_1", "col\_2", "col\_3", "col\_4", "row\_1", "row\_2", "row\_3"}.}
+\end{enumerate}
+\end{tcolorbox}
+
+\newpage
+
+
+%%%-------  Creare DataFrames ------
+
+\section{DataFrames}
+
+%---------
+\subsection{Creazione di DataFrames}
+
+Uno degli oggetti più utilizzati in R sono i DataFrames. I DataFrames permettono di raccogliere all'interno di uno stesso oggetto vettori di diverso tipo (i.e., vettori numerici, logici, fattori o stringhe di caratteri). Per questo motivo, i DataFrames sono  utili per riportare tutti i dati riguardanti le diverse variabili misurate in un esperimento.
+
+In genere ogni riga di un DataFrames rappresenta una singola osservazione e nelle colonne sono riportate i vari valori delle variabili misurate.
+
+Esistono due formati principali di DataFrames:
+\begin{itemize}
+    \item{\textbf{Wide}: ogni singola riga rappresenta un soggetto e ogni sua risposta o variabile misurata sarà riportata in una diversa colonna.}
+<<data_wide, echo=F>>=
+data_wide<-data.frame(Id=c("subj_1","subj_2","subj_3"),
+                 age=c(21,23,19),
+                 sex=c("F","M","F"),
+                 item_1=c(2,1,1),
+                 item_2=c(0,2,1),
+                 item_3=c(2,0,1))
+data_wide
+@
+    
+    \item{\textbf{Long}: ogni singola riga rappresenta una singola osservazione. Quindi i dati di ogni soggetto saranno riportati su più righe e le variabili che non cambiano tra le osservazioni saranno ripetute.}
+<<data_long, echo=F>>=
+data_long<-data.frame(Id=rep(c("subj_1","subj_2","subj_3"),each=3),
+                      age=rep(c(21,23,19),each=3),
+                      sex=rep(c("F","M","F"),each=3),
+                      item=rep(1:3,3),
+                      response=c(2,1,1,0,2,1,2,0,1))
+data_long
+@
+    
+\end{itemize}
+In R per definire un DataFrame si utilizza il comando:
+
+\texttt{nome\_DataFrame <- data.frame(variabile\_1=c(\ldots), \ldots, variabile\_s=c(\ldots))}\\
+All'interno vanno riportate le variabili che  si vogliono inserire separate da virgole. Ogni variabile deve avere la \textbf{stessa lunghezza}.
+
+\textbf{Nota:} di default R considera una variabile stringa all'interno di un DataFrame come una variabile categoriale. E' possibile cambiare questa opzione specificando \texttt{stringsAsFactors=FALSE}.
+
+\newpage        
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]       
+\textbf{Esercizi:}
+\begin{enumerate}
+    \item{Crea il dataframe \texttt{data\_wide} riportato precedentemente.}
+    \item{Crea il dataframe \texttt{data\_long} riportato precedentemente.}
+\end{enumerate}
+\end{tcolorbox}
+
+%------
+\subsection{Selezione di elementi di un DataFrame}
+
+In R per selezioneare gli elementi di un DataFrame si può, analogamente alle matrici, indicare all'interno delle parentesi quadre l'indice di riga e l'indice di colonna (\textbf{separati da virgola}).
+
+\texttt{nome\_DataFrame{[indice\_riga , indice\_colonna]}}\\
+Per accedere ad una specifica  variabile del DataFrame è possibile utilizzare l'operatore "\$":
+
+\texttt{nome\_DataFrame\$nome\_variabile}\\
+Per quanto riguarda l'indice di riga è possibile definire una condizione logica rispetto ad una variabile, mentre per l'indice di colonna si può indicare il nome delle  variabili:
+
+\texttt{nome\_DataFrame{[condizione\_logica , c("variabile\_1", \ldots, "variebile\_s")]}}
+
+\textbf{Nota:} per selezionare tutti gli elementi di una data riga basta lasciare vuoto l'indice di colonna.
+
+\textbf{Esempio:} \texttt{data\_wide[data\_wide\$sex=="F", c("Id","age")]}
+
+\vspace{1em}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Utilizzando gli \textbf{indici numerici} di riga e di colonna selziona i dati del soggetto \texttt{subj\_2} riguardanti le variabili \texttt{item} e \texttt{response} dal DataFrame \texttt{data\_long}.}
+    \item{Compi la stessa selezione dell'esercizio precedente usando però questa volta una condizione logica per gli indici di riga e indicando direttamente il nome delle variabili per gli indici di colonna.}
+    \item{Considerando il DataFrame \texttt{data\_wide} seleziona le variabili \texttt{Id} e \texttt{sex} dei soggetti che hanno risposto 1 alla variabile \texttt{item\_1}.}
+    \item{Considerando il DataFrame \texttt{data\_long} seleziona solamente i dati riguardanti le ragazze con etè superiore ai 20 anni.}
+    \item{Elimina dal DataFrame \texttt{data\_long} le osservazioni riguardanti il soggetto \texttt{subj\_2} e la variabile \texttt{"sex"}.}
+\end{enumerate}
+\end{tcolorbox}
+
+\newpage
+%------
+\subsection{Funzioni con DataFrames}
+
+
+\renewcommand{\baselinestretch}{1} 
+\begin{table}[h!]
+\begin{center}
+\caption{Operazioni con DataFrames}
+\begin{tabular}[t]{ | p{.5\textwidth} | p{.5\textwidth} | } 
+ \hline
+ \texttt{nome\_DataFrame <- cbind(nome\_DataFrame, \hspace*{4cm}nuova\_variabile)}  & Per aggiungere una nuova variabile al DataFrame (deve avere lo stesso numero di righe) \\
+ \texttt{nome\_DataFrame\$nome\_variabile <- dati}     & \\ 
+ \hline
+ \texttt{nome\_DataFrame <- rbind(nome\_DataFrame, \hspace*{5cm}nuovi\_dati)}       & Per sggiungere delle osservazioni (i nuovi dati devono essere coerenti con la struttura del DataFrame)  \\
+ \hline
+ \texttt{nrow(nome\_DataFrame)}       & Per valutare il numero di osservazioni del DataFrame \\
+ \hline
+ \texttt{ncol(nome\_DataFrame)}       & Per valutare il numero di variabili del DataFrame \\
+ \hline
+ \hline
+ \texttt{colnames(nome\_DataFrame)}       & Nomi delle colonne del DataFrame \\
+ \texttt{names(nome\_DataFrame)}          &  \\
+ \hline 
+ \texttt{rownames(nome\_DataFrame)}       & Nomi delle righe del DataFrame \\
+ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\textbf{Nota:} E' possibile assegnare nomi alle colonne e righe di un DataFrame allo stesso modo delle matrici, atttraverso i comandi
+
+    \texttt{colnames(nome\_DataFrame)<-c("nome\_1",\ldots,"nome\_s")}
+    
+    \texttt{names(nome\_DataFrame)<-c("nome\_1",\ldots,"nome\_s")}
+    
+    \texttt{rownames(nome\_DataFrame)<-c("nome\_1",\ldots,"nome\_n")}
+
+\vspace{1em}
+
+\begin{tcolorbox}[colback=blue!5!white,breakable,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Aggiungi sia al DataFrame \texttt{data\_wide} che \texttt{data\_long} la variabile numerica \texttt{"memory\_pre"}.}
+<<memory, echo=F>>=
+data.frame(Id=c("subj_1","subj_2","subj_3"),
+                      memory_pre=c(3,2,1))
+@
+    
+    \item{Aggiungi sia al DataFrame \texttt{data\_wide} che \texttt{data\_long} la variabile categoriale \texttt{"gruppo"}.}
+<<gruppo, echo=F>>=
+data.frame(Id=c("subj_1","subj_2","subj_3"),
+                      gruppo=c("trattamento","trattemento","controllo"))
+@
+    
+    \item{Aggiungi al DataFrame \texttt{data\_wide} i dati del soggetto \texttt{subj\_4} e \texttt{subj\_5}.}
+<<subj4_5, echo=F>>=
+data.frame(Id=c("subj_4","subj_5"),
+           age=c(25,22),
+           sex=c("F","M"),
+           item_1=c(1,1),
+           item_2=c(0,1),
+           item_3=c(2,0),
+           memory_pre=c(1,3),
+           gruppo=c("trattemento","controllo"))
+@
+    \item{Considerando il DataFrame \texttt{data\_wide} calcola la variabile \texttt{"memory\_post"} data dalla somma degli item.}
+    \item{Considerando il DataFrame \texttt{data\_wide} cambia i nomi delle variabili \texttt{item\_1}, \texttt{item\_2} e \texttt{item\_3} rispettivamente in \texttt{problem\_1}, \texttt{problem\_2} e \texttt{problem\_3}.}
+\end{enumerate}
+\end{tcolorbox}
+
+\newpage
+
+%%%-------  Creare Liste ------
+
+\section{Liste}
+
+%---------
+\subsection{Creazione di Liste}
+
+Le liste sono degli speciali oggi in R che permettono di contenere al loro interno altri oggetti indipendentemente dalla loro tipologia. Possiamo quindi avere nella stessa lista sia vettori, sia matrici sia DataFrames.
+
+In R per definire una lista si utilizza il comando:
+
+\texttt{nome\_Lista <- list(nome\_oggetto\_1 = oggetto\_1, \ldots, nome\_oggetto\_n = oggetto\_n)}\\
+All'interno si possono riportare vari oggettiche  si vogliono inserire con i relativi nomi, separati da virgole.
+
+\begin{tcolorbox}[colback=blue!5!white,breakable,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Crea la lista \texttt{esperimento\_1} contenente:
+    \begin{itemize}
+        \item{il DataFrame \texttt{data\_wide}}
+        \item{la matrice \texttt{A}}
+        \item{il vettore \texttt{x}}
+        \item{la variabile \texttt{info = "Hello world!"}}
+    \end{itemize}}
+    \item{Crea la lista \texttt{esperimento\_2} contenente:
+    \begin{itemize}
+        \item{il DataFrame \texttt{data\_long}}
+        \item{la matrice \texttt{C}}
+        \item{il vettore \texttt{y}}
+        \item{la variabile \texttt{info = "Prima raccolta dati"}}
+    \end{itemize}}
+\end{enumerate}
+\end{tcolorbox}
+
+%------
+\subsection{Selezione di elementi di una lista}
+
+In R per selezioneare gli elementi di una lista si possono usare le doppie parentesi quadre indicando l'indice della posizione dell'oggetto che si vuole selezionare:
+
+\texttt{nome\_lista{[[indice\_posizione]]}}\\
+In alternativa, se i nomi degli oggetti sono stati specificati, è possibile utilizzare l'operatore "\$" e il nome dell'oggetto da selezionare all'interno della lista:
+
+\texttt{nome\_lista\$nome\_oggetto}
+In seguito per accedere a specifici elementi all'interno degli oggetti si utilizzano le stesse norme precedentemente presentate a seconda del tipo di oggetto.
+
+\textbf{Esempio:} \texttt{esperimento\_1{[[2]][,2]}\\ \hspace*{2.3cm}esperimento\_1\$data\_wide\$age}
+
+\textbf{Nota:} per definire o cambiare i nomi degli oggetti contenuti in una lista è possibile utilizzare la funzione:\\\texttt{names(nome\_lista) <- c(nome\_oggetto\_1, \ldots, nome\_oggetto\_n)}
+
+
+\vspace{1em}
+
+\begin{tcolorbox}[colback=blue!5!white,breakable,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Utilizzando gli \textbf{indici numerici} di posizione selziona i dati dei soggetti \texttt{subj\_1} e \texttt{subj\_4} riguardanti le variabili \texttt{age},\texttt{sex} e \texttt{gruppo} dal DataFrame \texttt{data\_wide} contenuto nella lista \texttt{esperimento\_1}.}
+    \item{Compi la stessa selezione dell'esercizio precedente usando però questa volta il nome dell'oggetto per selezionare il DateFrame dalla lista.}
+    \item{Considerando la lista \texttt{esperimento\_2} seleziona gli oggetti \texttt{data\_long}, \texttt{y} e \texttt{info}}.
+    \item{Cambia i nomi degli oggetti contenuti nella lista \texttt{esperimento\_2} rispettivamente in \texttt{"dati\_esperimento"}, \texttt{"matrice\_VCV"}, \texttt{"codici\_Id} e \texttt{"note"}}
+\end{enumerate}
+\end{tcolorbox}
+
+\newpage
+
+%%%-------  Vettori numerici, logici, fattori e stringhe ------
+
+\section{Tipi di vettori}
+
+In R ci sono 4 tipi differenti di vettori: numerici, logici, caratteri e fattori.
+
+%------
+\subsection{Vettori numerici}
+
+I vettori numerici sono utilizzati per compiere operazioni aritmetiche, in R sono indicati come \texttt{num}. In R ci sono è possibil e specificare se i numeri contenuti nel vettore sono numeri interi, avremmo quindi un vettore di valori interi (indicato in R come \texttt{int}). Per fare ciò è possibile aggiungere \texttt{L} ad ogni valore numerico nel definire il vettore oppure usare la funzione \texttt{as.integer()} per trasformare un vettore numerico in un vettore intero.
+
+\textbf{Esempio:}
+<<integer>>=
+x <- c(4L, 6L, 12L, 34L, 8L)
+
+x <- as.integer(c(4, 6, 12, 34, 8))
+@
+
+\textbf{Nota}: per trasformare un vettore intero in un vettore numerico è possibile usare la funzione \texttt{as.numeric()}.
+
+%------
+\subsection{Vettori logici}
+
+I vettori logici sono formati dai volori \texttt{TRUE} e \texttt{FALSE}, che possono essere  abbreviati rispettivamente in \texttt{T} e \texttt{F}. In R i vettori logici sono indicati come \texttt{logi}. In genere, i vettori logici sono il risultato delle operazioni in cui viene chiesto ad R di valutare la condizione logica di una proposizione.
+<<logi>>=
+x>10
+@
+
+\textbf{Nota:} in R, come in molti altri software di programmazione, \texttt{TRUE} assume il valore numerico \texttt{1} e \texttt{FALSE} assume il valore \texttt{0}. 
+<<logi2>>=
+sum(x>10)
+@
+E' possibile trasformare un vettore numerico in un vettor logico attraverso la funzione \texttt{as.logical()}, gli \texttt{0} assumeranno il valore \texttt{FALSE} mentre qualsiasi altro numero assumerà il valore \texttt{TRUE}.
+<<logi3>>=
+as.logical(c(1,0,.034,-1,0,8))
+@
+
+\newpage
+%------
+\subsection{Vettori di caratteri}
+
+I vettori di caratteri contengono stringhe di caratteri e sono indicati in R con \texttt{chr}. Non è possibile eseguire operazioni aritmetiche con vettori di caratteri ma solo valutare se due stringhe sono uguali o differenti.
+<<chr>>=
+j<-c("Hello","World","hello","world")
+j=="hello"
+@
+Per trasformare un vettore qualsiasi in una vettore di caratteri e possibile usare la funzione \texttt{as.character()}.
+<<chr2>>=
+as.character(x)
+as.character(x>10)
+@
+
+%------
+\subsection{Fattori}
+
+I fattori sono utilizzati per definire delle variabili categoriali, sono indicati in R con \texttt{Factor}. Per creare una variabile categoriale in R si utilizza la funzione:
+
+\texttt{nome\_variabile<-factor(c(\ldots, data, \ldots), levels=c(\ldots))}\\
+L'opzione \texttt{levels=c(\ldots)} è usata per specificare quali sono i possibili livelli della variabile categoriale. E' possibile modificare o aggiungere nuovi livelli della variabile anche in un secondo momento utilizzando la funzione:
+
+\texttt{levels(nome\_fattore)<- c(\ldots, nuovi\_livelli, \ldots)}
+
+\textbf{Nota}: nel creare un fattore R associa ad ogni livello un valore in ordine crescente e assegna agli elementi del vettore il loro volore numerico a seconda del proprio livello. Pertanto se un fattore è trasformato in un vettore numerico vengono restituiti tali valori numerici e non i livelli anche nel caso fossero dei numeri. Prendiamo per esempio la variabile \texttt{anni\_istruzione}
+<<factor>>=
+anni_istruzione<-factor(c(11,8,4,8,11,4,11,8))
+anni_istruzione
+as.numeric(anni_istruzione)
+@
+Per riottenere gli estti valori numerici è necessario eseguire
+<<factor2>>=
+as.numeric(as.character(anni_istruzione))
+@
+
+\begin{tcolorbox}[colback=blue!5!white,breakable,colframe=blue!75!black,title=Esercizi]
+\begin{enumerate}
+    \item{Crea la variabile categoriale \texttt{sex} così definita:
+<<es_factor, echo=F>>=
+factor(c(rep(c("M","F"),3),"F","F","M"))
+@
+    
+    }
+    \item{Rinomina i livelli della variabile \texttt{sex} rispettivamente in \texttt{"donne"} e \texttt{"uomini"}.}
+    \item{Crea la variabile categoriale \texttt{intervento} così definita:
+<<es_factor2, echo=F>>=
+factor(c(rep(c("CBT","Psicanalisi"),3),"Controllo","Controllo","CBT"))
+@
+    }
+    \item{Correggi nella variabile \texttt{intervento} la 7\degree e 8\degree osservazione con la voce \texttt{Farmaci}.}
+    \item{Aggiungi alla variabile \texttt{intervento} le seguenti nuove osservazioni:
+<<es_factor3, echo=F>>=
+c("Farmaci","Controllo","Farmaci")
+@
+    }
+\end{enumerate}
+\end{tcolorbox}
+
+% sort order vectors
+%
+\end{document}
+
+
